@@ -3,75 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sao Cũng Được</title>
+    <title>Medical Tools - Sao Cũng Được</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap');
-
         body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            /* Gradient màu vàng sang trọng */
+            font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-            font-family: 'Montserrat', sans-serif;
-            overflow: hidden;
+            min-height: 100vh;
         }
-
-        .container {
-            text-align: center;
-            padding: 50px 80px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            transition: transform 0.3s ease;
-        }
-
-        .container:hover {
-            transform: scale(1.05);
-        }
-
-        h1 {
-            font-size: 5rem;
-            color: #ffffff;
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
-            animation: fadeIn 2s ease-in-out;
-        }
-
-        p {
-            color: #fff;
-            font-weight: 300;
-            letter-spacing: 2px;
-            margin-top: 10px;
-            opacity: 0.8;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Responsive cho điện thoại */
-        @media (max-width: 600px) {
-            h1 { font-size: 2.5rem; }
-            .container { padding: 30px; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
     </style>
 </head>
-<body>
+<body class="p-4">
 
-    <div class="container">
-        <h1>SAO CŨNG ĐƯỢC</h1>
-        <p>Whatever works for you</p>
+    <nav class="max-w-6xl mx-auto mb-8 flex justify-between items-center p-4 glass-card shadow-lg">
+        <div class="font-bold text-xl text-orange-600">MED-APP</div>
+        <button onclick="alert('Chức năng đăng nhập đang phát triển!')" class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full transition shadow-md">
+            Đăng nhập
+        </button>
+    </nav>
+
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <div class="glass-card p-6 shadow-xl">
+            <h2 class="text-xl font-bold mb-4 text-gray-800 border-b pb-2">Tính GFR (MDRD)</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium">Creatinine huyết thanh (mg/dL):</label>
+                    <input type="number" id="creatinine" step="0.1" class="w-full p-2 border rounded mt-1" placeholder="Ví dụ: 1.2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Tuổi:</label>
+                    <input type="number" id="age" class="w-full p-2 border rounded mt-1">
+                </div>
+                <div class="flex gap-4">
+                    <label><input type="radio" name="gender" value="male" checked> Nam</label>
+                    <label><input type="radio" name="gender" value="female"> Nữ</label>
+                </div>
+                <button onclick="calculateMDRD()" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">Tính toán</button>
+                <div id="mdrd-result" class="mt-4 p-3 bg-blue-50 rounded text-blue-800 font-bold text-center"></div>
+            </div>
+        </div>
+
+        <div class="glass-card p-6 shadow-xl">
+            <h2 class="text-xl font-bold mb-4 text-gray-800 border-b pb-2">Thang điểm CHA₂DS₂-VASc</h2>
+            <div id="vasc-form" class="text-sm space-y-2">
+                <label class="flex items-center"><input type="checkbox" value="1" class="mr-2"> Suy tim (1đ)</label>
+                <label class="flex items-center"><input type="checkbox" value="1" class="mr-2"> Tăng huyết áp (1đ)</label>
+                <label class="flex items-center"><input type="checkbox" value="2" class="mr-2" id="age75"> Tuổi ≥ 75 (2đ)</label>
+                <label class="flex items-center"><input type="checkbox" value="1" class="mr-2"> Đái tháo đường (1đ)</label>
+                <label class="flex items-center"><input type="checkbox" value="2" class="mr-2"> Tiền sử Đột quỵ/TIA (2đ)</label>
+                <label class="flex items-center"><input type="checkbox" value="1" class="mr-2"> Bệnh mạch máu (1đ)</label>
+                <label class="flex items-center"><input type="checkbox" value="1" class="mr-2"> Tuổi 65-74 (1đ)</label>
+                <label class="flex items-center"><input type="checkbox" value="1" class="mr-2" id="female-sex"> Nữ giới (1đ)</label>
+                <button onclick="calculateVasc()" class="w-full bg-green-600 text-white py-2 mt-4 rounded hover:bg-green-700 transition">Tính điểm</button>
+                <div id="vasc-result" class="mt-4 p-3 bg-green-50 rounded text-green-800 font-bold text-center"></div>
+            </div>
+        </div>
+
     </div>
 
+    <script>
+        function calculateMDRD() {
+            const scr = parseFloat(document.getElementById('creatinine').value);
+            const age = parseInt(document.getElementById('age').value);
+            const isFemale = document.querySelector('input[name="gender"]:checked').value === 'female';
+            
+            if (isNaN(scr) || isNaN(age)) {
+                alert("Vui lòng nhập đầy đủ thông số");
+                return;
+            }
+
+            // Công thức MDRD đơn giản hóa
+            let gfr = 175 * Math.pow(scr, -1.154) * Math.pow(age, -0.203);
+            if (isFemale) gfr *= 0.742;
+
+            document.getElementById('mdrd-result').innerText = `GFR: ${gfr.toFixed(2)} mL/min/1.73 m²`;
+        }
+
+        function calculateVasc() {
+            let score = 0;
+            const checkboxes = document.querySelectorAll('#vasc-form input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                if (cb.checked) score += parseInt(cb.value);
+            });
+            document.getElementById('vasc-result').innerText = `Tổng điểm: ${score}`;
+        }
+    </script>
 </body>
 </html>
